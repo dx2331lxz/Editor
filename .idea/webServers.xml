@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="3dbb0d29-7ede-4dcc-aa76-8e9458d71185" name="还得是腾讯云">
+        <fileTransfer rootFolder="/www/wwwroot/editor.daoxuan.cc" accessType="SFTP" host="81.70.143.162" port="22" sshConfigId="b09fabad-a965-488f-b70c-871d91bf5d06" sshConfig="root@81.70.143.162:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" isUseSudo="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
