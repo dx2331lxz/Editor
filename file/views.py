@@ -251,3 +251,53 @@ class Photo(APIView):
         if default_storage.exists(absolute_photo_path):
             default_storage.delete(absolute_photo_path)
             return
+
+
+# 上传音频文件
+class Audio(APIView):
+    parser_classes = [MultiPartParser, JSONParser]
+
+    def post(self, request):
+        user_id = request.user.id
+        user = models.User.objects.get(id=user_id)
+        audio = request.data.get('audio')
+        if not audio:
+            return Response({'msg': '请上传音频'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 限制文件大小
+        if audio.size > 1024 * 1024 * 10:
+            return Response({'msg': '文件大小不能超过10M'}, status=status.HTTP_400_BAD_REQUEST)
+
+        audio_name = audio.name
+        # 避免文件名重复
+        while default_storage.exists(os.path.join(settings.MEDIA_ROOT, 'audio', audio_name)):
+            audio_name = f'{os.path.splitext(audio_name)[0]}_copy{os.path.splitext(audio_name)[1]}'
+        audio.name = audio_name
+
+        obj = models.Audio.objects.create(audio=audio, user=user)
+
+        return Response({'msg': '上传成功', 'audio_path': obj.audio.url}, status=status.HTTP_200_OK)
+
+    # 删除音频
+    def delete(self, request):
+        audio_path = request.data.get('audio_path')
+        if not audio_path:
+            return Response({'msg': '请传入音频路径'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 检查音频路径是否在媒体目录中
+        if not audio_path.startswith(settings.MEDIA_URL):
+            return Response({'msg': '音频路径不在媒体目录中'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # 提取相对路径，并删除开头的'/media/'部分
+        relative_audio_path = audio_path[len(settings.MEDIA_URL):]
+
+        models.Audio.objects.filter(audio=relative_audio_path).delete()
+        # 使用媒体根目录构建完整的音频路径
+        absolute_audio_path = os.path.join(settings.MEDIA_ROOT, relative_audio_path)
+
+        # 删除音频
+        if default_storage.exists(absolute_audio_path):
+            default_storage.delete(absolute_audio_path)
+            return Response({'msg': '删除成功'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'msg': '音频不存在'}, status=status.HTTP_400_BAD_REQUEST)

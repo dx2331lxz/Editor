@@ -139,6 +139,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ACCESS_TOKEN = conf.get("AI", "ACCESS_TOKEN")
+SPEECH = conf.get("AI", "SPEECH")
 
 CORS_ALLOW_CREDENTIALS = True
 

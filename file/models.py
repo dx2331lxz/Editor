@@ -41,3 +41,14 @@ class Text(models.Model):
     location = models.CharField(verbose_name="文章位置", max_length=50, blank=True, null=True)
     size = models.IntegerField(verbose_name="文章大小")
 
+# 音频
+class Audio(models.Model):
+    audio = models.FileField(upload_to='audio', verbose_name='音频')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='用户')
+
+    class Meta:
+        verbose_name = '音频'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.user.username
