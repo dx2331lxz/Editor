@@ -140,7 +140,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ACCESS_TOKEN = conf.get("AI", "ACCESS_TOKEN")
 SPEECH = conf.get("AI", "SPEECH")
-
+TABLE = conf.get("AI", "TABLE")
+CODE_COMPLETION_1 = conf.get("AI", "CODE_COMPLETION_1")
+SecretId = conf.get("SMS", "SecretId")
+SecretKey = conf.get("SMS", "SecretKey")
 CORS_ALLOW_CREDENTIALS = True
 
 # CORS_ORIGIN_ALLOW_ALL = True
@@ -150,6 +153,8 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^http://((127\.0\.0\.1)|(localhost)|(10\.\d{1,3}\.\d{1,3}\.\d{1,3})|(172\.((1[6-9])|(2\d)|(3[01]))\.\d{1,3}\.\d{1,3})|(192\.168\.\d{1,3}\.\d{1,3}))(:\d+){0,1}$",
 #     # 允许https://editor.funny233.xyz
     r"^https://editor\.funny233\.xyz$",
+#     https://static-zzbjzxwd.aistudio-app.com/
+    r"^https://static-zzbjzxwd\.aistudio-app\.com$",
 
 ]
 

@@ -24,7 +24,8 @@ import requests
 
 erniebot.api_type = 'aistudio'
 erniebot.access_token = settings.ACCESS_TOKEN
-
+# 支持模型：
+# ernie-3.5，ernie-turbo，ernie-4.0，ernie-3.5-8k，ernie-text-embedding
 
 # Create your views here.
 
@@ -46,8 +47,9 @@ class Translate(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    print(response.get_result(), end='', flush=True)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     break
 
@@ -79,8 +81,9 @@ class Translate(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    print(response.get_result(), end='', flush=True)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     yield f'data: [DONE]\n\n'
                     break
@@ -107,8 +110,9 @@ class Summary(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    print(response.get_result(), end='', flush=True)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     break
 
@@ -137,8 +141,9 @@ class Summary(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    print(response.get_result(), end='', flush=True)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     yield f'data: [DONE]\n\n'
                     break
@@ -165,8 +170,9 @@ class Abstract(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    print(response.get_result(), end='', flush=True)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     break
 
@@ -195,8 +201,9 @@ class Abstract(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    print(response.get_result(), end='', flush=True)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     yield f'data: [DONE]\n\n'
                     break
@@ -223,8 +230,9 @@ class Continue2Write(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    print(response.get_result(), end='', flush=True)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     break
 
@@ -256,8 +264,9 @@ class Continue2Write(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    print(response.get_result(), end='', flush=True)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     yield f'data: [DONE]\n\n'
                     break
@@ -318,8 +327,9 @@ class Polish(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    print(response.get_result(), end='', flush=True)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     break
 
@@ -351,8 +361,9 @@ class Polish(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    print(response.get_result(), end='', flush=True)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     yield f'data: [DONE]\n\n'
                     break
@@ -417,7 +428,8 @@ class OCR(APIView):
             # 返回识别图的base64编码
             # return result["image"]
             pprint.pp(result['texts'])
-            return {'texts': result['texts'], 'image': result['image']}
+            # return {'texts': result['texts'], 'image': result['image']}
+            return {'texts': result['texts']}
         except Exception as e:
             return {'msg': '图片识别失败'}
 
@@ -475,7 +487,7 @@ class MysystemAPIView(APIView):
             return Response({'msg': '请输入system'}, status=status.HTTP_400_BAD_REQUEST)
 
         response_stream = erniebot.ChatCompletion.create(
-            model='ernie-3.5',
+            model='ernie-4.0',
             messages=[{'role': 'user', 'content': f"""{content}"""}],
             system=f"""{system}""",
             stream=True,
@@ -485,7 +497,9 @@ class MysystemAPIView(APIView):
             while True:
                 try:
                     response = next(response_stream)
-                    yield f'data: {response.get_result()}\n\n'
+                    # 将结果base64加密
+                    res = base64.b64encode(response.get_result().encode()).decode()
+                    yield f'data: {res}\n\n'
                 except StopIteration:
                     yield f'data: [DONE]\n\n'
                     break
@@ -500,8 +514,16 @@ class MysystemAPIView(APIView):
 # 语音识别
 class SpeechAPIView(APIView):
     def post(self, request):
+        data = request.data
+        audio_base64 = data.get("audio")
+        audio_format = data.get("audio_format", "wav")
+        sample_rate = data.get("sample_rate", 16000)
+        sample_rate = int(sample_rate)
+        lang = data.get("lang", "zh_cn")
+        punc = data.get("punc", 0)
+        # 转换为bool
+        punc = punc == "true"
 
-        audio_base64 = request.data.get("audio")
 
 
 
@@ -511,10 +533,10 @@ class SpeechAPIView(APIView):
         url = f"{settings.SPEECH}/asr/"
         payload = {
             "audio": audio_base64,
-            "audio_format": "wav",
-            "sample_rate": 16000,
-            "lang": "zh_cn",
-            "punc": 0
+            "audio_format": audio_format,
+            "sample_rate": sample_rate,
+            "lang": lang,
+            "punc": True
         }
 
         headers = {
@@ -525,3 +547,63 @@ class SpeechAPIView(APIView):
         json_string = resp.content.decode('utf-8')
         json_data = json.loads(json_string)
         return Response(json_data, status=status.HTTP_200_OK)
+
+
+# 代码补全（简要版）
+class CodeCompletion_1_APIView(APIView):
+    def post(self, request):
+        data = request.data
+        s = data.get('s')
+        eol = data.get('eol')
+        if not s or not eol:
+            return Response({'msg': '请输入内容'}, status=status.HTTP_400_BAD_REQUEST)
+
+        url = f"{settings.CODE_COMPLETION_1}/code/"
+        payload = {
+            "s": s,
+            "eol": eol
+        }
+
+        headers = {
+            "Content-Type": "application/json"
+        }
+
+        resp = requests.post(url=url, json=payload, headers=headers)
+        resp['s'] = s
+        return Response(resp, status=status.HTTP_200_OK)
+
+
+
+# 通用表格识别
+class TableAPIView(APIView):
+    def post(self, request):
+        image_base64 = request.data.get('image')
+        if not image_base64:
+            return Response({'msg': '请上传图片base64编码'}, status=status.HTTP_400_BAD_REQUEST)
+        response = self.table(image_base64)
+        return Response(response, status=status.HTTP_200_OK)
+
+    def table(self, image_base64: str):
+
+        API_URL = settings.TABLE
+
+        # 设置鉴权信息
+        headers = {
+            "Authorization": f"token {settings.ACCESS_TOKEN}",
+            "Content-Type": "application/json"
+        }
+
+        # 设置请求体
+        payload = {
+            "image": image_base64  # Base64编码的文件内容或者文件链接
+        }
+
+        # 调用
+        resp = requests.post(url=API_URL, json=payload, headers=headers)
+
+        # 解析接口返回数据
+        try:
+            result = resp.json()["result"]
+            return {'tables': result['tables']}
+        except Exception as e:
+            return {'msg': '图片识别失败'}

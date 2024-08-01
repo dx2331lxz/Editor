@@ -221,9 +221,13 @@ class Photo(APIView):
             return Response({'msg': '文件大小不能超过2M'}, status=status.HTTP_400_BAD_REQUEST)
 
         photo_name = photo.name
-        # 避免文件名重复
+        # 避免文件名重复，使用uuid
+        import uuid
         while default_storage.exists(os.path.join(settings.MEDIA_ROOT, 'photo', photo_name)):
-            photo_name = f'{os.path.splitext(photo_name)[0]}_copy{os.path.splitext(photo_name)[1]}'
+            photo_name = f'{uuid.uuid4()}{os.path.splitext(photo_name)[1]}'
+
+
+            # photo_name = f'{os.path.splitext(photo_name)[0]}_copy{os.path.splitext(photo_name)[1]}'
         photo.name = photo_name
 
         obj = models.Photo.objects.create(photo=photo, user=user)
@@ -301,3 +305,4 @@ class Audio(APIView):
             return Response({'msg': '删除成功'}, status=status.HTTP_200_OK)
         else:
             return Response({'msg': '音频不存在'}, status=status.HTTP_400_BAD_REQUEST)
+

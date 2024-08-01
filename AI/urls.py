@@ -12,4 +12,6 @@ urlpatterns = [
     path('objectdetection/', views.ObjectDetection.as_view()),
     path('mysystem/', views.MysystemAPIView.as_view()),
     path('speech/', views.SpeechAPIView.as_view()),
+    path('table/', views.TableAPIView.as_view()),
+    path('codecompletion1/', views.CodeCompletion_1_APIView.as_view()),
 ]
